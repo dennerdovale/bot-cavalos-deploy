@@ -42,13 +42,15 @@ def calcular_ev(fair, atual):
     return (prob_justa * atual) - 1
 
 def enviar_alerta(cavalo, corrida, odd_bet365, fair_odd, ev):
-    msg = f"⚡ *APOSTA EV+ DETECTADA*
+msg = f"""⚡ *APOSTA EV+ DETECTADA*
 
-"           f"*Corrida:* {corrida}
-"           f"*Cavalo:* {cavalo}
-"           f"*Odd Bet365:* {odd_bet365:.2f}
-"           f"*Odd Justa:* {fair_odd:.2f}
-"           f"*EV:* {ev:.2%}"
+*Corrida:* {corrida}
+*Cavalo:* {cavalo}
+*Odd Bet365:* {odd_bet365:.2f}
+*Odd Justa:* {fair_odd:.2f}
+*EV:* {ev:.2%}
+"""
+
 
     payload = {
         'chat_id': TELEGRAM_CHAT_ID,
@@ -102,10 +104,13 @@ def monitorar_ev():
 
         if 'bookmakers' not in evento:
             continue
+try:
+    commence_time = evento["commence_time"]
+    home_team = evento["home_team"]
+    corrida_nome = f"{commence_time} — {home_team}"
+except (TypeError, KeyError):
+    corrida_nome = "Corrida desconhecida"
 
-        corrida_nome = evento.get('commence_time', '') + ' — ' + evento.get('home_team', '')
-        mercado_bet365 = next((b for b in evento['bookmakers'] if b['title'] == 'Bet365'), None)
-        if not mercado_bet365:
             continue
 
         mercados = mercado_bet365.get('markets', [])
