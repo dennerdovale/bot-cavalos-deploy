@@ -49,13 +49,14 @@ def solicitar_odd_justa_chatgpt(cavalo, corrida, odd_media):
         return odd_media
 
 def enviar_alerta(cavalo, corrida, odd_bet365, fair_odd, ev):
-    msg = f"⚡ *APOSTA EV+ DETECTADA*
+    msg = f"""⚡ *APOSTA EV+ DETECTADA*
 
 *Corrida:* {corrida}
 *Cavalo:* {cavalo}
 *Odd Bet365:* {odd_bet365:.2f}
 *Odd Justa:* {fair_odd:.2f}
-*EV:* {ev:.2%}"
+*EV:* {ev:.2%}
+"""
     payload = {'chat_id': TELEGRAM_CHAT_ID, 'text': msg, 'parse_mode': 'Markdown'}
     requests.post(f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage", data=payload)
 
